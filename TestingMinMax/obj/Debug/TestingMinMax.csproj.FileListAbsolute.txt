@@ -1,0 +1,11 @@
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_3\TestingMinMax\bin\Debug\TestingMinMax.dll
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_3\TestingMinMax\bin\Debug\TestingMinMax.pdb
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_3\TestingMinMax\bin\Debug\nunit.framework.dll
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_3\TestingMinMax\bin\Debug\TicTacToe_3.exe
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_3\TestingMinMax\bin\Debug\TicTacToe_3.pdb
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_3\TestingMinMax\bin\Debug\nunit.framework.xml
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_3\TestingMinMax\obj\Debug\TestingMinMax.csprojAssemblyReference.cache
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_3\TestingMinMax\obj\Debug\TestingMinMax.csproj.CoreCompileInputs.cache
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_3\TestingMinMax\obj\Debug\TestingMinMax.csproj.CopyComplete
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_3\TestingMinMax\obj\Debug\TestingMinMax.dll
+C:\Users\ufon2\Disk Google\+++Programko\C#\TicTacToe_3\TestingMinMax\obj\Debug\TestingMinMax.pdb

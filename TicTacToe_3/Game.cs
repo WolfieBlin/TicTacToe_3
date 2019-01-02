@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace TicTacToe_3
 {
-    class Game
+    public class Game
     {
         public string[] _board;
         public bool _playerTurn;

@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe_3", "TicTacToe_3\TicTacToe_3.csproj", "{289C741C-12B4-41C9-8CA2-C8DE9D44F9CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingMinMax", "TestingMinMax\TestingMinMax.csproj", "{CD2FACC9-93CB-4FAA-BAE8-2AC82136F53B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{289C741C-12B4-41C9-8CA2-C8DE9D44F9CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{289C741C-12B4-41C9-8CA2-C8DE9D44F9CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{289C741C-12B4-41C9-8CA2-C8DE9D44F9CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD2FACC9-93CB-4FAA-BAE8-2AC82136F53B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD2FACC9-93CB-4FAA-BAE8-2AC82136F53B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD2FACC9-93CB-4FAA-BAE8-2AC82136F53B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD2FACC9-93CB-4FAA-BAE8-2AC82136F53B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

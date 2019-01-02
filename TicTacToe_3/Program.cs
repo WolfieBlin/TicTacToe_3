@@ -1,11 +1,24 @@
-﻿namespace TicTacToe_3
+﻿using System;
+
+namespace TicTacToe_3
 {
     internal class Program
     {
         public static void Main(string[] args)
         {
-            var game = new Game();
-            game.Start();
+            try
+            {
+               
+                var game = new Game();
+               
+                game.Start();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
         }
     }
 }

@@ -7,8 +7,11 @@ namespace TicTacToe_3
     public class Game
     {
         public string[] _board;
-        public bool _playerTurn;
+        public string _playerTurn;
         private readonly Random _random = new Random();
+        private int iter;
+        private string aiPlayer = "O";
+        private string huPlayer = "X";
         
         public Game()
         {
@@ -25,9 +28,9 @@ namespace TicTacToe_3
             var availMoves = reboard.Where(s => s !="X" && s != "O").ToArray();
             return availMoves;
         }
-         public int Minimax(string[] reboard, bool player) 
+         public MoveS Minimax(string[] reboard, string player)
          {
-           
+             iter++;
             // board looks like this [] {"0","1","2","3","4","5","6","7","8"}
             //player X == true and player O == false
             //X is human O is an AI
@@ -35,43 +38,39 @@ namespace TicTacToe_3
 
             var array = Avail(reboard);
             //check if current position of the board is winning
-            if (WinningMinMax(reboard, true)) {
-                return -10;
-            } else if (WinningMinMax(reboard, false)) {
-              return  10;
+            if (WinningMinMax(reboard, huPlayer)) {
+                var pokusObject = new MoveS();
+                pokusObject.score = -10;
+                return pokusObject;
+            } else if (WinningMinMax(reboard, aiPlayer)) {
+                var pokusObject = new MoveS();
+                pokusObject.score = 10;
+                return pokusObject;
             // or it is a draw
-            } else if (DrawMinMax(reboard)) {
-               return 0;
+            } else if (array.Length == 0) {
+                var pokusObject = new MoveS();
+                pokusObject.score = 0;
+                return pokusObject;
             }
             //MoveS is an object with two parameters: index and score
             List<MoveS> moves = new List<MoveS>();
-            
+           
             for (var i = 0; i < array.Length; i++)
             {
                 var move = new MoveS();
                 move.index = Convert.ToInt32(reboard[Convert.ToInt32(array[i])]);
                 
-                if (player)
-                {
-                    reboard[Convert.ToInt32(array[i])] = "X";
-                }
-                else
-                {
-                    reboard[Convert.ToInt32(array[i])] = "O";
-                }
-
-                if (!player) {
-                    var g = new MoveS();
+                reboard[Convert.ToInt32(array[i])] = player;
+               
+                if (player == aiPlayer) {
+                    //var result = new MoveS();
                    //recursive call for building the tree of possible moves
-                     g.score = Minimax(reboard, true);
-                    
-                     move.score = g.score;
+                     var result = Minimax(reboard, huPlayer);
+                     move.score = result.score;
                 } else {
-                    var g = new MoveS();
-                   
-                    g.score = Minimax(reboard, false);
-                   
-                    move.score = g.score;
+                    //var result = new MoveS();
+                    var result = Minimax(reboard, aiPlayer);
+                    move.score = result.score;
                 }
                 //resets the board value
                 reboard[Convert.ToInt32(array[i])] = move.index.ToString();
@@ -82,7 +81,7 @@ namespace TicTacToe_3
          
             //finding the best move of possible moves
             int bestMove = 0;
-            if (player == false) {
+            if (player == aiPlayer) {
                 var bestScore = -10000;
                 for (var i = 0; i < moves.Count; i++) {
                     if (moves[i].score > bestScore) {
@@ -100,29 +99,20 @@ namespace TicTacToe_3
                 }
             }
             //returning the best move's index for an Ai to play
-            return moves[bestMove].index;
+            return moves[bestMove];
         }
-         public bool WinningMinMax(string[] board, bool player)
+         public bool WinningMinMax(string[] board, string player)
          {
-             string playerXO;
-           
-             if (player)
-             {
-                 playerXO = "X";
-             }
-             else
-             {
-                 playerXO = "O";
-             }
             
-             if ((board[0] == playerXO && board[1] == playerXO && board[2] == playerXO) ||
-                 (board[3] == playerXO && board[4] == playerXO && board[5] == playerXO) ||
-                 (board[6] == playerXO && board[7] == playerXO && board[8] == playerXO) ||
-                 (board[0] == playerXO && board[3] == playerXO && board[6] == playerXO) ||
-                 (board[1] == playerXO && board[4] == playerXO && board[7] == playerXO) ||
-                 (board[2] == playerXO && board[5] == playerXO && board[8] == playerXO) ||
-                 (board[0] == playerXO && board[4] == playerXO && board[8] == playerXO) ||
-                 (board[2] == playerXO && board[4] == playerXO && board[6] == playerXO))
+            
+             if ((board[0] == player && board[1] == player && board[2] == player) ||
+                 (board[3] == player && board[4] == player && board[5] == player) ||
+                 (board[6] == player && board[7] == player && board[8] == player) ||
+                 (board[0] == player && board[3] == player && board[6] == player) ||
+                 (board[1] == player && board[4] == player && board[7] == player) ||
+                 (board[2] == player && board[5] == player && board[8] == player) ||
+                 (board[0] == player && board[4] == player && board[8] == player) ||
+                 (board[2] == player && board[4] == player && board[6] == player))
              {
                 
                  return true;
@@ -147,13 +137,13 @@ namespace TicTacToe_3
                      {
                          _board[element] = "X";
                         
-                         _playerTurn = false;
+                         _playerTurn = aiPlayer;
                      }
                      else
                      {
                          _board[element] = "O";
                          
-                         _playerTurn = true;
+                         _playerTurn = huPlayer;
                      }
                      Print(_board);
                  }
@@ -164,11 +154,11 @@ namespace TicTacToe_3
             
              if (_random.Next(0,2) == 1)
              {
-                 _playerTurn = true;
+                 _playerTurn = huPlayer;
              }
              else
              {
-                 _playerTurn = false;
+                 _playerTurn = aiPlayer;
              }
          }
          private void Print(string[] board)
@@ -195,8 +185,9 @@ namespace TicTacToe_3
          }
          private int AiTurn()
          {
-             var avail = Avail(_board);
-             return  Convert.ToInt32(avail[_random.Next(0, avail.Length)]);
+             /*var avail = Avail(_board);
+             return  Convert.ToInt32(avail[_random.Next(0, avail.Length)]);*/
+             return Minimax(_board, aiPlayer).index;
          }
          public void Start()
          {
@@ -205,9 +196,9 @@ namespace TicTacToe_3
                  Reset();
                  Print(_board);
                 
-                 while (!WinningMinMax(_board, !_playerTurn) && !DrawMinMax(_board))
+                 while (!WinningMinMax(_board, aiPlayer) && !DrawMinMax(_board) && !WinningMinMax(_board, huPlayer))
                  {
-                     if (_playerTurn)
+                     if (_playerTurn == huPlayer)
                      {
                          Move(HracTurn(), true);
                      }
@@ -217,9 +208,9 @@ namespace TicTacToe_3
                      }
                  }
 
-                 if (WinningMinMax(_board, !_playerTurn))
+                 if (WinningMinMax(_board, aiPlayer) || WinningMinMax(_board, huPlayer))
                  {
-                     if (!_playerTurn)
+                     if (_playerTurn == aiPlayer)
                      {
                          Console.WriteLine("Vyhrál: X");
                      }

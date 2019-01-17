@@ -8,8 +8,10 @@ namespace TicTacToe_3
     {
         public string[] _board;
         public string _playerTurn;
+        private string _playerFirst;
         private readonly Random _random = new Random();
         private int iter;
+        private int round;
         private string aiPlayer = "O";
         private string huPlayer = "X";
         
@@ -28,7 +30,7 @@ namespace TicTacToe_3
             var availMoves = reboard.Where(s => s !="X" && s != "O").ToArray();
             return availMoves;
         }
-         public MoveS Minimax(string[] reboard, string player)
+         public MoveS Minimax(string[] reboard, string player, int random)
          {
              iter++;
             // board looks like this [] {"0","1","2","3","4","5","6","7","8"}
@@ -65,11 +67,11 @@ namespace TicTacToe_3
                 if (player == aiPlayer) {
                     //var result = new MoveS();
                    //recursive call for building the tree of possible moves
-                     var result = Minimax(reboard, huPlayer);
+                     var result = Minimax(reboard, huPlayer, 2);
                      move.score = result.score;
                 } else {
                     //var result = new MoveS();
-                    var result = Minimax(reboard, aiPlayer);
+                    var result = Minimax(reboard, aiPlayer, 2);
                     move.score = result.score;
                 }
                 //resets the board value
@@ -81,12 +83,14 @@ namespace TicTacToe_3
          
             //finding the best move of possible moves
             int bestMove = 0;
+            int bestMoveRandom = 0;
             if (player == aiPlayer) {
                 var bestScore = -10000;
                 for (var i = 0; i < moves.Count; i++) {
                     if (moves[i].score > bestScore) {
                         bestScore = moves[i].score;
                         bestMove = i;
+                        bestMoveRandom = bestScore;
                     }
                 }
             } else {
@@ -95,12 +99,21 @@ namespace TicTacToe_3
                     if (moves[i].score < bestScore) {
                         bestScore = moves[i].score;
                         bestMove = i;
+                        bestMoveRandom = bestScore;
                     }
                 }
             }
             //returning the best move's index for an Ai to play
-            return moves[bestMove];
-        }
+            if (random != 1)
+            {
+                return moves[bestMove];
+                
+            }
+            
+            moves = moves.Where(s => s.score == bestMoveRandom).ToList();
+            var tah = _random.Next(0, moves.Count);
+            return moves[tah];
+         }
          public bool WinningMinMax(string[] board, string player)
          {
             
@@ -129,11 +142,11 @@ namespace TicTacToe_3
              }
              return false;
          }
-         private void Move(int element, bool player)
+         private void Move(int element, string player)
          {
                  if (_board[element] != "X" && _board[element] != "O")
                  {
-                     if (player)
+                     if (player == huPlayer)
                      {
                          _board[element] = "X";
                         
@@ -151,14 +164,17 @@ namespace TicTacToe_3
          private void Reset()
          {
              _board = new [] {"0","1","2","3","4","5","6","7","8"};
-            
+             round = 0;
+             
              if (_random.Next(0,2) == 1)
              {
                  _playerTurn = huPlayer;
+                 _playerFirst = huPlayer;
              }
              else
              {
                  _playerTurn = aiPlayer;
+                 _playerFirst = aiPlayer;
              }
          }
          private void Print(string[] board)
@@ -167,6 +183,8 @@ namespace TicTacToe_3
             
              Console.WriteLine("Vítejte v TicTacToe, kde hrajete proti počítači.");
              Console.WriteLine("Hrajete za křížek: X a potítač za kolečko: O");
+
+             Console.WriteLine("round: " + round + " Calculation: " + iter);
             
              Console.WriteLine("     |     |      ");
              Console.WriteLine("  {0}  |  {1}  |  {2}", board[0] , board[1], board[2]);
@@ -187,7 +205,7 @@ namespace TicTacToe_3
          {
              /*var avail = Avail(_board);
              return  Convert.ToInt32(avail[_random.Next(0, avail.Length)]);*/
-             return Minimax(_board, aiPlayer).index;
+             return Minimax(_board, aiPlayer, 1).index;
          }
          public void Start()
          {
@@ -200,11 +218,20 @@ namespace TicTacToe_3
                  {
                      if (_playerTurn == huPlayer)
                      {
-                         Move(HracTurn(), true);
+                         if (_playerFirst == huPlayer)
+                         {
+                             round++;
+                         }
+                         Move(HracTurn(), huPlayer);
                      }
                      else
                      {
-                         Move(AiTurn(), false);
+                         if (_playerFirst == aiPlayer)
+                         {
+                             round++;
+                         }
+                         iter = 0;
+                         Move(AiTurn(), aiPlayer);
                      }
                  }
 

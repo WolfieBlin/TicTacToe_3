@@ -11,6 +11,9 @@ namespace TicTacToe_3
                
                 var game = new Game();
                 var game4_4 = new Game4_4();
+                Console.WriteLine("Vyberte si, jestli chcete hrát na " +
+                                  "poli 3x3 (možnost 1), nebo na poli 4x4 s " +
+                                  "jinými pravidly (možnost2)");
                 var volba = Convert.ToInt32(Console.ReadLine());
 
                 switch (volba)

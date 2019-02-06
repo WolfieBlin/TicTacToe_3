@@ -6,31 +6,32 @@ namespace TicTacToe_3
 {
     class Game4_4
     {
-        public string[] _board;
-        public string _playerTurn;
+        private string[] _board;
+        private string _playerTurn;
         private string _playerFirst;
         private readonly Random _random = new Random();
-        private long iter;
-        private int round = 0;
-        private string aiPlayer = "O";
-        private string huPlayer = "X";
-        private int x;
-        
-        public struct MoveS
+        private long _iter;
+        private int _round;
+        private const string AiPlayer = "O";
+        private const string HuPlayer = "X";
+        private int _x;
+
+        private struct MoveS
         {
-            public int index;
-            public int score;
+            public int Index;
+            public int Score;
             
         }
-        public string[] Avail(string[] reboard)
+
+        private static string[] Avail(string[] reboard)
         {
             var availMoves = reboard.Where(s => s !="X" && s != "O").ToArray();
             return availMoves;
         }
-        
-         public MoveS Minimax(string[] reboard, string player, int depth, int random)
+
+        private MoveS Minimax(string[] reboard, string player, int depth, int random)
          {
-             iter++;
+             _iter++;
             // board looks like this [] {"0","1","2","3","4","5","6","7","8"}
             //player X == true and player O == false
             //X is human O is an AI
@@ -40,52 +41,54 @@ namespace TicTacToe_3
             
             
             //check if current position of the board is winning
-            if (WinningMinMax(reboard, huPlayer)) {
+            if (WinningMinMax(reboard, HuPlayer)) {
                 var pokusObject = new MoveS();
-                pokusObject.score = -10;
-                return pokusObject;
-            } else if (WinningMinMax(reboard, aiPlayer)) {
-                var pokusObject = new MoveS();
-                pokusObject.score = 10;
-                return pokusObject;
-            // or it is a draw
-            } else if (array.Length == 0) {
-                var pokusObject = new MoveS();
-                pokusObject.score = 0;
+                pokusObject.Score = -10;
                 return pokusObject;
             }
-            
+
+            if (WinningMinMax(reboard, AiPlayer)) {
+                var pokusObject = new MoveS {Score = 10};
+                return pokusObject;
+                // or it is a draw
+            }
+
+            if (array.Length == 0) {
+                var pokusObject = new MoveS {Score = 0};
+                return pokusObject;
+            }
+
             if (depth <= 0) {
                 var pokusObject = new MoveS();
-                pokusObject.score = 0;
+                pokusObject.Score = 0;
                 return pokusObject;
             }
             //MoveS is an object with two parameters: index and score
-            List<MoveS> moves = new List<MoveS>();
+            var moves = new List<MoveS>();
          
             for (var i = 0; i < array.Length; i++)
                 {
                     var move = new MoveS();
-                    move.index = Convert.ToInt32(reboard[Convert.ToInt32(array[i])]);
+                    move.Index = Convert.ToInt32(reboard[Convert.ToInt32(array[i])]);
 
                     reboard[Convert.ToInt32(array[i])] = player;
 
-                    if (player == aiPlayer)
+                    if (player == AiPlayer)
                     {
                         //var result = new MoveS();
                         //recursive call for building the tree of possible moves
-                        var result = Minimax(reboard, huPlayer, depth--, 1);
-                        move.score = result.score;
+                        var result = Minimax(reboard, HuPlayer, depth--, 1);
+                        move.Score = result.Score;
                     }
                     else
                     {
                         //var result = new MoveS();
-                        var result = Minimax(reboard, aiPlayer, depth--, 1);
-                        move.score = result.score;
+                        var result = Minimax(reboard, AiPlayer, depth--, 1);
+                        move.Score = result.Score;
                     }
 
                     //resets the board value
-                    reboard[Convert.ToInt32(array[i])] = move.index.ToString();
+                    reboard[Convert.ToInt32(array[i])] = move.Index.ToString();
                     // adding the final object move to a List of moves with score for every move
                     moves.Add(move);
                 }
@@ -95,11 +98,11 @@ namespace TicTacToe_3
             //finding the best move of possible moves
             int bestMove = 0;
             int bestMoveRandom = 0;
-            if (player == aiPlayer) {
+            if (player == AiPlayer) {
                 var bestScore = -10000;
                 for (var i = 0; i < moves.Count; i++) {
-                    if (moves[i].score > bestScore) {
-                        bestScore = moves[i].score;
+                    if (moves[i].Score > bestScore) {
+                        bestScore = moves[i].Score;
                         bestMove = i;
                         bestMoveRandom = bestScore;
                     }
@@ -107,8 +110,8 @@ namespace TicTacToe_3
             } else {
                 var bestScore = 10000;
                 for (var i = 0; i < moves.Count; i++) {
-                    if (moves[i].score < bestScore) {
-                        bestScore = moves[i].score;
+                    if (moves[i].Score < bestScore) {
+                        bestScore = moves[i].Score;
                         bestMove = i;
                         bestMoveRandom = bestScore;
                     }
@@ -121,12 +124,12 @@ namespace TicTacToe_3
                 
             }
             
-            moves = moves.Where(s => s.score == bestMoveRandom).ToList();
+            moves = moves.Where(s => s.Score == bestMoveRandom).ToList();
             var tah = _random.Next(0, moves.Count);
             return moves[tah];
         }
-         
-         public bool WinningMinMax(string[] board, string player)
+
+        private bool WinningMinMax(string[] board, string player)
          {
              if (board[0] == player && board[1] == player && board[2] == player && board[3] == player ||
                  board[4] == player && board[5] == player && board[6] == player && board[7] == player ||
@@ -169,8 +172,8 @@ namespace TicTacToe_3
              }
              return false;
          }
-         
-         public bool DrawMinMax(string[] board)
+
+        private bool DrawMinMax(string[] board)
          {
              if (board[0] != "0" && board[1] != "1" && board[2] != "2" && board[3]
                  != "3" && board[4] != "4" && board[5] != "5" && board[6] != "6"
@@ -188,17 +191,17 @@ namespace TicTacToe_3
          {
              if (_board[element] != "X" && _board[element] != "O")
              {
-                 if (player == huPlayer)
+                 if (player == HuPlayer)
                  {
                      _board[element] = "X";
                         
-                     _playerTurn = aiPlayer;
+                     _playerTurn = AiPlayer;
                  }
                  else
                  {
                      _board[element] = "O";
                          
-                     _playerTurn = huPlayer;
+                     _playerTurn = HuPlayer;
                  }
                  Print(_board);
              }
@@ -207,17 +210,17 @@ namespace TicTacToe_3
           private void Reset()
          {
              _board = new [] {"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"};
-             round = 0;
+             _round = 0;
              
              if (_random.Next(0,2) == 1)
              {
-                 _playerTurn = huPlayer;
-                 _playerFirst = huPlayer;
+                 _playerTurn = HuPlayer;
+                 _playerFirst = HuPlayer;
              }
              else
              {
-                 _playerTurn = aiPlayer;
-                 _playerFirst = aiPlayer;
+                 _playerTurn = AiPlayer;
+                 _playerFirst = AiPlayer;
              }
          }
          private void Print(string[] board)
@@ -227,7 +230,7 @@ namespace TicTacToe_3
              Console.WriteLine("Vítejte v TicTacToe, kde hrajete proti počítači.");
              Console.WriteLine("Hrajete za křížek: X a potítač za kolečko: O");
 
-             Console.WriteLine("round: " + round + " Calculation: " + iter);
+             Console.WriteLine("round: " + _round + " Calculation: " + _iter);
             
              Console.WriteLine("     |     |     |      ");
              Console.WriteLine("  {0}  |  {1}  |  {2}  |  {3}  ", board[0] , board[1], board[2], board[3]);
@@ -257,28 +260,28 @@ namespace TicTacToe_3
 
                  return Convert.ToInt32(Avail(_board)[privniTah]);
              }*/
-             if (_playerFirst == aiPlayer)
+             if (_playerFirst == AiPlayer)
              {
-                 x = 9;
+                 _x = 9;
              }
              else
              {
-                 x = 10;
+                 _x = 10;
              }
-             if (round == 1)
+             if (_round == 1)
              {
-                 return Minimax(_board, aiPlayer, x, 1).index;
+                 return Minimax(_board, AiPlayer, _x, 1).Index;
              }
 
-             if (round == 2)
+             if (_round == 2)
              {
-                 return Minimax(_board, aiPlayer, x + 3, 1).index;
+                 return Minimax(_board, AiPlayer, _x + 3, 1).Index;
              }
-             if (round == 3)
+             if (_round == 3)
              {
-                 return Minimax(_board, aiPlayer, x + 7, 1).index;
+                 return Minimax(_board, AiPlayer, _x + 7, 1).Index;
              }
-             return Minimax(_board, aiPlayer, 100, 1).index;
+             return Minimax(_board, AiPlayer, 100, 1).Index;
          }
          public void Start()
          {
@@ -287,30 +290,30 @@ namespace TicTacToe_3
                  Reset();
                  Print(_board);
                 
-                 while (!WinningMinMax(_board, aiPlayer) && !DrawMinMax(_board) && !WinningMinMax(_board, huPlayer))
+                 while (!WinningMinMax(_board, AiPlayer) && !DrawMinMax(_board) && !WinningMinMax(_board, HuPlayer))
                  {
-                     if (_playerTurn == huPlayer)
+                     if (_playerTurn == HuPlayer)
                      {
-                         if (_playerFirst == huPlayer)
+                         if (_playerFirst == HuPlayer)
                          {
-                             round++;
+                             _round++;
                          }
-                         Move(HracTurn(), huPlayer);
+                         Move(HracTurn(), HuPlayer);
                      }
                      else
                      {
-                         if (_playerFirst == aiPlayer)
+                         if (_playerFirst == AiPlayer)
                          {
-                             round++;
+                             _round++;
                          }
-                         iter = 0;
-                         Move(AiTurn(), aiPlayer);
+                         _iter = 0;
+                         Move(AiTurn(), AiPlayer);
                      }
                  }
 
-                 if (WinningMinMax(_board, aiPlayer) || WinningMinMax(_board, huPlayer))
+                 if (WinningMinMax(_board, AiPlayer) || WinningMinMax(_board, HuPlayer))
                  {
-                     if (_playerTurn == aiPlayer)
+                     if (_playerTurn == AiPlayer)
                      {
                          Console.WriteLine("Vyhrál: X");
                      }
